@@ -1,74 +1,57 @@
 <script>
-  let fname = "Anis";
-  let lname = "Khan";
-  let color = "green";
-  let showGreen = true;
-  $: name = fname + " " + lname;
+  import { tick } from "svelte";
+  import {feedback_count} from './store/feedback'
+  import Feedback from "./components/feedback.svelte";
+  let feedbacks = [
+    {
+      id: 1,
+      byUser: "Anis",
+      comment: "Good Work",
+    },
+    {
+      id: 2,
+      byUser: "Bla Bla",
+      comment: "Good Work",
+    },
+    {
+      id: 5,
+      byUser: "Noocne",
+      comment: "Not a good Work",
+    },
+    {
+      id: 4,
+      byUser: "ro2",
+      comment: "stipid Work",
+    },
+  ];
 
-  const toggleColor = function () {
-    if (color == "green") {
-      color = "red";
-      showGreen = false;
-    } else {
-      color = "green";
-      showGreen = true;
-    }
-  };
+  let store_feedback_count ;
+  $: totalFeedbacks = feedbacks.length;
 
-  const users = [{
-    id: 1, 
-    name: 'Anis'
-  },{
-    id: 2, 
-    name: 'Khan'
-  },{
-    id: 3, 
-    name: 'Jawad'
-  },{
-    id: 4, 
-    name: 'Abbas'
-  }]
+  async function deleteFeedback(event) {
+    feedbacks = feedbacks.filter((Feedback) => Feedback.id !== event.detail.id);
+    console.log("totalFeedbacks before tick =>>> ", totalFeedbacks);
+    await tick();
+    console.log("totalFeedbacks after tick =>>> ", totalFeedbacks);
+    feedback_count.set(totalFeedbacks)
+    
+  }
+  function viewInfo(event) {
+    console.log(event.detail);
+  }
+
+  //store subscription 
+
+  feedback_count.subscribe(value => {
+    store_feedback_count = value
+  })
 </script>
 
 <main>
-  <h1 style="color: {color}">Hello {name}!</h1>
-  <p>
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-    how to build Svelte apps.
-  </p>
-
-  {#if showGreen}
-    <p>The Text is green now</p>
-  {:else}
-    <p>The Text is red now</p>
-  {/if}
-
-  {#each users as user (user.id)}
-    <p> {user.id} : {user.name}</p> 
-  {/each}
-
-  <button on:click={toggleColor}>Update color </button>
-
+  <p>Total Feedbacks are : {totalFeedbacks}</p>
+  <p>Total Feedbacks in store are : {store_feedback_count}</p>
+  <Feedback {feedbacks} on:emitBack={viewInfo} on:delete={deleteFeedback} />
 </main>
 
 <style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  }
 </style>
