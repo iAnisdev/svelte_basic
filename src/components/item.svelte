@@ -1,6 +1,9 @@
 <script>
   import { onMount, onDestroy , createEventDispatcher } from "svelte";
 
+  import {feedback_count} from './../store/feedback'
+
+
   const dispatch = createEventDispatcher();
   export let feedback = {};
   var interval =  {}
@@ -11,16 +14,16 @@
   function deleteFeedback(){
     dispatch('delete' , feedback)
   }
+  const feedback_count_subscriber = feedback_count.subscribe((value) => {
+    console.log("Value is ==> " , value)
+  })
   onMount(() =>{
     // console.log('mounted')
     // interval = setInterval(() => {
     //   console.log('item is still up ', feedback.id)
     // }, 1000);
   })
-  onDestroy(() =>{
-    // console.log('destroyed')
-    // clearInterval(interval)
-  })
+  onDestroy(feedback_count_subscriber)
 </script>
 
 <main class="card">

@@ -25,7 +25,6 @@
     },
   ];
 
-  let store_feedback_count ;
   $: totalFeedbacks = feedbacks.length;
 
   async function deleteFeedback(event) {
@@ -36,20 +35,17 @@
     feedback_count.set(totalFeedbacks)
     
   }
+
+  
   function viewInfo(event) {
     console.log(event.detail);
   }
 
-  //store subscription 
-
-  feedback_count.subscribe(value => {
-    store_feedback_count = value
-  })
 </script>
 
 <main>
   <p>Total Feedbacks are : {totalFeedbacks}</p>
-  <p>Total Feedbacks in store are : {store_feedback_count}</p>
+  <p>Total Feedbacks in store are : {$feedback_count}</p>
   <Feedback {feedbacks} on:emitBack={viewInfo} on:delete={deleteFeedback} />
 </main>
 
