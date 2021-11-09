@@ -1,29 +1,31 @@
 <script>
-  import { onMount, onDestroy , createEventDispatcher } from "svelte";
+  import { onMount, onDestroy, createEventDispatcher } from "svelte";
 
-  import {feedback_count} from './../store/feedback'
-
+  import { feedback_count } from "./../store/feedback";
 
   const dispatch = createEventDispatcher();
   export let feedback = {};
-  var interval =  {}
+  var interval = {};
 
   function emitBack() {
     dispatch("emitBack", feedback);
   }
-  function deleteFeedback(){
-    dispatch('delete' , feedback)
+  function deleteFeedback() {
+    dispatch("delete", feedback);
   }
   const feedback_count_subscriber = feedback_count.subscribe((value) => {
-    console.log("Value is ==> " , value)
-  })
-  onMount(() =>{
+    console.log("Value is ==> ", value);
+  });
+
+  onMount(() => {
     // console.log('mounted')
     // interval = setInterval(() => {
     //   console.log('item is still up ', feedback.id)
     // }, 1000);
-  })
-  onDestroy(feedback_count_subscriber)
+  });
+  onDestroy(() => {
+    feedback_count_subscriber
+  });
 </script>
 
 <main class="card">
