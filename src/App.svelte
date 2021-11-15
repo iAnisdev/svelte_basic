@@ -4,10 +4,15 @@ let name: string = 'Anis'
 let age: number = 12
 </script>
 
-<div>
+<div class="page">
     <h2>Hello {name}</h2>
 </div>
 
-<style>
-
+<style type="text/scss">
+.page{
+    padding: 1px 1vw;
+    h2{
+        color: red;
+    }
+}
 </style>
